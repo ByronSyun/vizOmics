@@ -1,0 +1,33 @@
+Package: vizOmics
+Title: Visualization Tools for Multi-Omics Data Analysis
+Version: 0.1.0
+Authors@R: 
+    person("Byron", "Sun", , "byronsun@example.com", role = c("aut", "cre"))
+Description: A collection of visualization and utility functions for multi-omics 
+    data analysis. Includes tools for clustering alignment, score matrix visualization,
+    and Sankey diagrams for comparing classification results. Functions extracted and
+    adapted from PhiSpace package for standalone use.
+License: MIT + file LICENSE
+Encoding: UTF-8
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.3.2
+Depends:
+    R (>= 4.0.0)
+Imports: 
+    ggplot2,
+    cowplot,
+    gridExtra,
+    networkD3,
+    dplyr,
+    tidyr,
+    clue,
+    magrittr,
+    rlang
+Suggests: 
+    testthat (>= 3.0.0),
+    knitr,
+    rmarkdown
+VignetteBuilder: knitr
+URL: https://github.com/ByronSyun/vizOmics
+BugReports: https://github.com/ByronSyun/vizOmics/issues
+
