@@ -131,8 +131,12 @@ plotSankey <- function(..., add_suffix = TRUE, fontsize = 12, class_names = NULL
     confTab23 <- table(class2, class3)
     for (i in 1:nrow(confTab23)) {
       fromClass <- rownames(confTab23)[i]
+      # Check if fromClass exists in incidMat row names
+      if (!(fromClass %in% rownames(incidMat))) next
       for (j in 1:ncol(confTab23)) {
         toClass <- colnames(confTab23)[j]
+        # Check if toClass exists in incidMat column names
+        if (!(toClass %in% colnames(incidMat))) next
         incidMat[fromClass, toClass] <- confTab23[i, j]
       }
     }

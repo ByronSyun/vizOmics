@@ -2,12 +2,14 @@
 % Please edit documentation in R/matrixPlot.R
 \name{get_color_palette}
 \alias{get_color_palette}
-\title{Get Color Palette}
+\title{Get Continuous Color Palette}
 \usage{
-get_color_palette(palette_name = "matlab")
+get_color_palette(palette_name = "matlab", reverse = FALSE)
 }
 \arguments{
 \item{palette_name}{Character. Name of the palette.}
+
+\item{reverse}{Logical. If TRUE, reverse the color order.}
 }
 \value{
 Character vector of colors.

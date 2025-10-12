@@ -9,8 +9,18 @@
 ## Features
 
 - **`alignClusters()`**: Align clustering results using optimal assignment (Hungarian algorithm)
-- **`matrixPlot()`**: Create comprehensive visualizations of score matrices with density plots and scatter plots
+- **`matrixPlot()`**: Create comprehensive visualizations of score matrices with **intelligent color detection** and multiple palettes
 - **`plotSankey()`**: Generate interactive Sankey diagrams for 2 or 3 classification comparisons
+
+### 🆕 What's New in vizOmics
+
+**Enhanced `matrixPlot()` with Smart Coloring**:
+- ✅ **Intelligent color type detection**: Automatically distinguishes between discrete (factors, clusters) and continuous (expression) variables
+- ✅ **Reproducible colors**: Fixed color mapping ensures consistency across runs
+- ✅ **Multiple palettes**: 5 continuous (MATLAB, viridis, plasma, inferno, magma) and 5 discrete (Set1, Set2, Set3, Dark2, Paired) options
+- ✅ **Full control**: Manual override for color types and custom color specifications
+
+See [IMPROVEMENTS.md](IMPROVEMENTS.md) for detailed enhancement documentation.
 
 ## Installation
 
@@ -52,9 +62,18 @@ scores <- data.frame(
 # Basic matrix plot
 matrixPlot(scores, max_ncomp = 3)
 
-# Color by groups
-groups <- rep(c("A", "B", "C"), length.out = 100)
+# Color by discrete groups (auto-detected)
+groups <- factor(rep(c("A", "B", "C"), length.out = 100))
 matrixPlot(scores, max_ncomp = 3, colBy = groups, legendTitle = "Group")
+
+# Color by continuous variable (auto-detected)
+expression <- rnorm(100)
+matrixPlot(scores, max_ncomp = 3, colBy = expression, 
+           color_palette = "viridis", legendTitle = "Expression")
+
+# Integer clusters (auto-detected as discrete)
+clusters <- rep(1:3, length.out = 100)
+matrixPlot(scores, max_ncomp = 3, colBy = clusters, legendTitle = "Cluster")
 ```
 
 ### Create Sankey Diagram
@@ -86,11 +105,14 @@ Creates comprehensive visualizations for score matrices:
 - **2 components**: Scatter plot
 - **3+ components**: Matrix of density plots (diagonal) and scatter plots (off-diagonal)
 
-Features:
-- Multiple color palettes (MATLAB, viridis, plasma, etc.)
-- Customizable point sizes and transparency
-- Optional legend and custom colors
-- Support for both continuous and discrete coloring
+**Enhanced Features** (v0.1.0):
+- **Intelligent color type detection**: Automatically detects discrete (factors, integer clusters) vs continuous (numeric expression) variables
+- **Reproducible colors**: Fixed color mapping with sorted factor levels ensures consistency
+- **Multiple color palettes**: 
+  - Continuous: `matlab` (default), `viridis`, `plasma`, `inferno`, `magma`
+  - Discrete: `Set1` (default), `Set2`, `Set3`, `Dark2`, `Paired`
+- **Manual control**: Override auto-detection with `colBy_type` parameter
+- **Customizable**: Point sizes, transparency, custom colors, legend titles
 
 ### `plotSankey()`
 
@@ -112,6 +134,9 @@ vizOmics requires the following R packages:
 - clue
 - magrittr
 - rlang
+- viridisLite (for color palettes)
+- grDevices (for color generation)
+- utils
 
 ## Acknowledgments
 

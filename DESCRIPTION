@@ -22,7 +22,10 @@ Imports:
     tidyr,
     clue,
     magrittr,
-    rlang
+    rlang,
+    viridisLite,
+    grDevices,
+    utils
 Suggests: 
     testthat (>= 3.0.0),
     knitr,

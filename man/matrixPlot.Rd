@@ -9,6 +9,7 @@ matrixPlot(
   max_ncomp = NULL,
   comp_idx = NULL,
   colBy = NULL,
+  colBy_type = c("auto", "discrete"),
   pointAlpha = NULL,
   pointSize = 1,
   manualCol = NULL,
@@ -17,7 +18,10 @@ matrixPlot(
   returnPlotList = FALSE,
   legendTitle = "",
   compName = "comp",
-  color_palette = "matlab"
+  color_palette = "matlab",
+  sort_levels = TRUE,
+  treat_ordinal_as_continuous = FALSE,
+  reverse_gradient = FALSE
 )
 }
 \arguments{
@@ -29,8 +33,11 @@ will override \code{comp_idx}.}
 
 \item{comp_idx}{Default NULL. Indices of specific components to plot.}
 
-\item{colBy}{Numeric or character vector to specify color of points. Should have
-the same length as the number of rows in \code{scores}.}
+\item{colBy}{Numeric, character, or factor vector to specify color of points.
+Should have the same length as the number of rows in \code{scores}.}
+
+\item{colBy_type}{Character. Type of coloring: "auto" (default), "discrete". The
+previous option "continuous" is deprecated and will be treated as "auto".}
 
 \item{pointAlpha}{Numeric. Alpha transparency value for points (0-1).}
 
@@ -51,8 +58,21 @@ Default is FALSE.}
 \item{compName}{Character. Prefix for component column names. Default is "comp",
 so that the 1st column is named "comp1", etc.}
 
-\item{color_palette}{Character. Color palette to use. Options: "matlab" (default),
-"viridis", "plasma", "inferno", "magma". Only used for numeric \code{colBy}.}
+\item{color_palette}{Character. For continuous coloring: "matlab" (default),
+"viridis", "plasma", "inferno", "magma". For discrete coloring: "Set1", "Set2",
+"Set3", "Dark2", "Paired", or "custom".}
+
+\item{sort_levels}{Logical. For discrete coloring, whether to sort factor levels
+to ensure consistent color mapping across runs. Default is TRUE.}
+
+\item{treat_ordinal_as_continuous}{Logical. When TRUE, attempt to coerce
+character/factor ordinal labels (e.g. "1", "1 or 2", "7") into numeric values and
+use continuous gradients automatically if coercion succeeds. Default FALSE.}
+
+\item{reverse_gradient}{Logical. If TRUE, reverses the color gradient direction.
+For example, if your variable has higher values = more severe (like WOS: 7 is
+most severe), set TRUE to map high values to red. Default is FALSE (low = blue,
+high = red for matlab palette).}
 }
 \value{
 A combined plot (ggplot/grid object) showing:
@@ -74,9 +94,23 @@ The function creates different visualizations depending on the number of compone
 \item 2 components: Scatter plot
 \item 3+ components: Matrix of density plots (diagonal) and scatter plots (off-diagonal)
 }
+\subsection{Color Type Detection (when colBy_type = "auto")}{
 
-For numeric \code{colBy}, the MATLAB-style color gradient is used by default,
-which provides good contrast for continuous variables.
+The function intelligently determines whether to use discrete or continuous colors:
+\itemize{
+\item Factor or character: Always discrete, unless \code{treat_ordinal_as_continuous = TRUE}
+and labels can be reliably coerced to numeric (e.g. "1 or 2" -> 1.5)
+\item Numeric with <20 unique values and <50\\% of total: Discrete
+\item Numeric otherwise: Continuous
+}
+}
+
+\subsection{Color Consistency}{
+
+For discrete variables, colors are mapped consistently by sorting factor levels,
+ensuring the same colors appear for the same groups across different runs.
+Set \code{sort_levels = FALSE} to use the original factor level order.
+}
 }
 \examples{
 \dontrun{
@@ -90,18 +124,13 @@ scores <- data.frame(
 # Basic plot
 matrixPlot(scores, max_ncomp = 3)
 
-# Color by groups
-groups <- rep(c("A", "B", "C"), length.out = 100)
-matrixPlot(scores, max_ncomp = 3, colBy = groups)
+# Ordinal labels treated as discrete by default (7 fixed colours)
+wos <- factor(c("1","1 or 2","2","3","4","5","6","7"))[sample(1:8, 100, TRUE)]
+matrixPlot(scores, max_ncomp = 3, colBy = wos, legendTitle = "WOS")
 
-# Color by continuous variable
-continuous_var <- rnorm(100)
-matrixPlot(scores, max_ncomp = 3, colBy = continuous_var,
-           legendTitle = "Expression")
-
-# Custom colors
-matrixPlot(scores, max_ncomp = 2, colBy = groups,
-           manualCol = c("red", "blue", "green"))
+# For WOS where 7 is most severe, reverse gradient to map 7->red, 1->blue
+matrixPlot(scores, max_ncomp = 3, colBy = wos, legendTitle = "WOS",
+           reverse_gradient = TRUE)
 }
 
 }
