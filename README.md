@@ -16,11 +16,11 @@
 
 **Enhanced `matrixPlot()` with Smart Coloring**:
 - ✅ **Intelligent color type detection**: Automatically distinguishes between discrete (factors, clusters) and continuous (expression) variables
+- ✅ **Ordinal label parsing**: Recognizes patterns like "1 or 2" and converts to 1.5 for proper ordering
 - ✅ **Reproducible colors**: Fixed color mapping ensures consistency across runs
+- ✅ **Gradient direction control**: `reverse_gradient` parameter for mapping high values to warm colors
 - ✅ **Multiple palettes**: 5 continuous (MATLAB, viridis, plasma, inferno, magma) and 5 discrete (Set1, Set2, Set3, Dark2, Paired) options
 - ✅ **Full control**: Manual override for color types and custom color specifications
-
-See [IMPROVEMENTS.md](IMPROVEMENTS.md) for detailed enhancement documentation.
 
 ## Installation
 
@@ -74,6 +74,11 @@ matrixPlot(scores, max_ncomp = 3, colBy = expression,
 # Integer clusters (auto-detected as discrete)
 clusters <- rep(1:3, length.out = 100)
 matrixPlot(scores, max_ncomp = 3, colBy = clusters, legendTitle = "Cluster")
+
+# Ordinal scale with reversed gradient (e.g., WHO Ordinal Scale: 7 = most severe)
+wos <- factor(c("1", "1 or 2", "2", "3", "4", "5", "6", "7"))[sample(1:8, 100, TRUE)]
+matrixPlot(scores, max_ncomp = 3, colBy = wos, legendTitle = "WOS", 
+           reverse_gradient = TRUE)  # 7 = red (severe), 1 = blue (mild)
 ```
 
 ### Create Sankey Diagram
@@ -107,10 +112,12 @@ Creates comprehensive visualizations for score matrices:
 
 **Enhanced Features** (v0.1.0):
 - **Intelligent color type detection**: Automatically detects discrete (factors, integer clusters) vs continuous (numeric expression) variables
+- **Ordinal label parsing**: Recognizes "1 or 2" patterns and converts to numeric (1.5) for proper ordering
 - **Reproducible colors**: Fixed color mapping with sorted factor levels ensures consistency
+- **Gradient direction control**: `reverse_gradient = TRUE` to map high values → red, low values → blue
 - **Multiple color palettes**: 
   - Continuous: `matlab` (default), `viridis`, `plasma`, `inferno`, `magma`
-  - Discrete: `Set1` (default), `Set2`, `Set3`, `Dark2`, `Paired`
+  - Discrete: `Set1`, `Set2`, `Set3`, `Dark2`, `Paired`
 - **Manual control**: Override auto-detection with `colBy_type` parameter
 - **Customizable**: Point sizes, transparency, custom colors, legend titles
 
@@ -151,7 +158,7 @@ MIT License - see [LICENSE.md](LICENSE.md) for details.
 If you use vizOmics in your research, please cite:
 
 ```
-Sun, B. (2025). vizOmics: Visualization Tools for Multi-Omics Data Analysis.
+Mao, J., & Sun, Y. (2025). vizOmics: Visualization Tools for Multi-Omics Data Analysis.
 R package version 0.1.0. https://github.com/ByronSyun/vizOmics
 ```
 

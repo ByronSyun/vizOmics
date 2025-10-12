@@ -11,6 +11,11 @@
 *.Rcheck/
 .Rcheck/
 
+# Development/test files
+IMPROVEMENTS.md
+Rplots.pdf
+test_*.R
+
 # OS files
 .DS_Store
 Thumbs.db

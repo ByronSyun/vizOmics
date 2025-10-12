@@ -6,7 +6,7 @@
 \alias{vizOmics-package}
 \title{vizOmics: Visualization Tools for Multi-Omics Data Analysis}
 \description{
-A collection of visualization and utility functions for multi-omics data analysis. Includes tools for clustering alignment, score matrix visualization, and Sankey diagrams for comparing classification results. Functions extracted and adapted from PhiSpace package for standalone use.
+A collection of visualization and utility functions for multi-omics data analysis. Includes tools for clustering alignment, score matrix visualization with intelligent color detection, and interactive Sankey diagrams for comparing classification results. Functions extracted and enhanced from PhiSpace package.
 }
 \seealso{
 Useful links:
@@ -17,7 +17,12 @@ Useful links:
 
 }
 \author{
-\strong{Maintainer}: Byron Sun \email{byronsun@example.com}
+\strong{Maintainer}: Jiadong Mao \email{chiatungmao@gmail.com} (\href{https://orcid.org/0000-0002-3818-1981}{ORCID})
+
+Authors:
+\itemize{
+  \item Yinuo Sun \email{byronsunyinuoo@gmail.com}
+}
 
 }
 \keyword{internal}

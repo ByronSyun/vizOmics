@@ -42,8 +42,13 @@
 #'            class_names = c("Method1", "Method2", "Method3"))
 #' }
 #'
+#' @importFrom dplyr mutate filter
+#' @importFrom tidyr pivot_longer
 #' @export
 plotSankey <- function(..., add_suffix = TRUE, fontsize = 12, class_names = NULL) {
+  
+  # Avoid R CMD check NOTE about undefined global variables
+  value <- NULL
   
   # Capture all classification vectors
   class_list <- list(...)

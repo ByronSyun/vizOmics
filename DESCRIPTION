@@ -1,12 +1,15 @@
 Package: vizOmics
 Title: Visualization Tools for Multi-Omics Data Analysis
 Version: 0.1.0
-Authors@R: 
-    person("Byron", "Sun", , "byronsun@example.com", role = c("aut", "cre"))
+Author: Jiadong Mao [aut, cre] (<https://orcid.org/0000-0002-3818-1981>), Yinuo Sun [aut]
+Maintainer: Jiadong Mao <chiatungmao@gmail.com>
+Authors@R: c(
+  person("Jiadong", "Mao", , "chiatungmao@gmail.com", role = c("aut", "cre"), comment = c(ORCID = "0000-0002-3818-1981")),
+  person("Yinuo", "Sun", , "byronsunyinuoo@gmail.com", role = "aut"))
 Description: A collection of visualization and utility functions for multi-omics 
-    data analysis. Includes tools for clustering alignment, score matrix visualization,
-    and Sankey diagrams for comparing classification results. Functions extracted and
-    adapted from PhiSpace package for standalone use.
+    data analysis. Includes tools for clustering alignment, score matrix visualization
+    with intelligent color detection, and interactive Sankey diagrams for comparing 
+    classification results. Functions extracted and enhanced from PhiSpace package.
 License: MIT + file LICENSE
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
@@ -27,10 +30,7 @@ Imports:
     grDevices,
     utils
 Suggests: 
-    testthat (>= 3.0.0),
-    knitr,
-    rmarkdown
-VignetteBuilder: knitr
+    testthat (>= 3.0.0)
 URL: https://github.com/ByronSyun/vizOmics
 BugReports: https://github.com/ByronSyun/vizOmics/issues
 
