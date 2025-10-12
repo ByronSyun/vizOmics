@@ -1,18 +1,18 @@
 <urlset xmlns = 'http://www.sitemaps.org/schemas/sitemap/0.9'>
-<url><loc>/404.html</loc></url>
-<url><loc>/LICENSE-text.html</loc></url>
-<url><loc>/LICENSE.html</loc></url>
-<url><loc>/authors.html</loc></url>
-<url><loc>/index.html</loc></url>
-<url><loc>/reference/alignClusters.html</loc></url>
-<url><loc>/reference/coerce_ordinal_numeric.html</loc></url>
-<url><loc>/reference/get_color_palette.html</loc></url>
-<url><loc>/reference/get_discrete_colors.html</loc></url>
-<url><loc>/reference/index.html</loc></url>
-<url><loc>/reference/is_discrete_variable.html</loc></url>
-<url><loc>/reference/matrixPlot.html</loc></url>
-<url><loc>/reference/plotSankey.html</loc></url>
-<url><loc>/reference/prepare_discrete_coloring.html</loc></url>
-<url><loc>/reference/vizOmics-package.html</loc></url>
+<url><loc>https://byronsyun.github.io/vizOmics/404.html</loc></url>
+<url><loc>https://byronsyun.github.io/vizOmics/LICENSE-text.html</loc></url>
+<url><loc>https://byronsyun.github.io/vizOmics/LICENSE.html</loc></url>
+<url><loc>https://byronsyun.github.io/vizOmics/authors.html</loc></url>
+<url><loc>https://byronsyun.github.io/vizOmics/index.html</loc></url>
+<url><loc>https://byronsyun.github.io/vizOmics/reference/alignClusters.html</loc></url>
+<url><loc>https://byronsyun.github.io/vizOmics/reference/coerce_ordinal_numeric.html</loc></url>
+<url><loc>https://byronsyun.github.io/vizOmics/reference/get_color_palette.html</loc></url>
+<url><loc>https://byronsyun.github.io/vizOmics/reference/get_discrete_colors.html</loc></url>
+<url><loc>https://byronsyun.github.io/vizOmics/reference/index.html</loc></url>
+<url><loc>https://byronsyun.github.io/vizOmics/reference/is_discrete_variable.html</loc></url>
+<url><loc>https://byronsyun.github.io/vizOmics/reference/matrixPlot.html</loc></url>
+<url><loc>https://byronsyun.github.io/vizOmics/reference/plotSankey.html</loc></url>
+<url><loc>https://byronsyun.github.io/vizOmics/reference/prepare_discrete_coloring.html</loc></url>
+<url><loc>https://byronsyun.github.io/vizOmics/reference/vizOmics-package.html</loc></url>
 </urlset>
 
