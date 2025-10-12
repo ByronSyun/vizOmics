@@ -1,0 +1,44 @@
+url: https://byronsyun.github.io/vizOmics/
+
+template:
+  bootstrap: 5
+  bootswatch: cosmo
+
+home:
+  title: vizOmics - Visualization Tools for Multi-Omics Data
+  description: >
+    R package for multi-omics data visualization including clustering alignment,
+    score matrix plots, and interactive Sankey diagrams.
+
+reference:
+  - title: "Visualization Functions"
+    desc: >
+      Main visualization functions for multi-omics data analysis.
+    contents:
+      - matrixPlot
+      - plotSankey
+      
+  - title: "Utility Functions"
+    desc: >
+      Helper functions for data processing.
+    contents:
+      - alignClusters
+
+navbar:
+  structure:
+    left:  [home, reference, news]
+    right: [github]
+  components:
+    home:
+      icon: fas fa-home fa-lg
+      href: index.html
+    reference:
+      text: Reference
+      href: reference/index.html
+    news:
+      text: News
+      href: news/index.html
+    github:
+      icon: fab fa-github fa-lg
+      href: https://github.com/ByronSyun/vizOmics
+
