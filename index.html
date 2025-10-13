@@ -81,65 +81,53 @@
 <h2 id="quick-start">Quick Start<a class="anchor" aria-label="anchor" href="#quick-start"></a>
 </h2>
 <div class="section level3">
-<h3 id="align-clustering-results">Align Clustering Results<a class="anchor" aria-label="anchor" href="#align-clustering-results"></a>
+<h3 id="example-covid-19-multi-omics-analysis">Example: COVID-19 Multi-Omics Analysis<a class="anchor" aria-label="anchor" href="#example-covid-19-multi-omics-analysis"></a>
 </h3>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/ByronSyun/vizOmics" class="external-link">vizOmics</a></span><span class="op">)</span></span>
 <span></span>
-<span><span class="co"># Create example clustering results</span></span>
-<span><span class="va">clust_ref</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">factor</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="st">"A"</span>, <span class="fl">50</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="st">"B"</span>, <span class="fl">50</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="st">"C"</span>, <span class="fl">50</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="va">clust_query</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">factor</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="st">"1"</span>, <span class="fl">50</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="st">"2"</span>, <span class="fl">50</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="st">"3"</span>, <span class="fl">50</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co"># Load DIVAS results and metadata</span></span>
+<span><span class="va">divasRes</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/readRDS.html" class="external-link">readRDS</a></span><span class="op">(</span><span class="st">"divas_results.rds"</span><span class="op">)</span></span>
+<span><span class="va">metadata</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/readRDS.html" class="external-link">readRDS</a></span><span class="op">(</span><span class="st">"metadata.rds"</span><span class="op">)</span></span>
 <span></span>
-<span><span class="co"># Align query to reference</span></span>
-<span><span class="va">clust_aligned</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/alignClusters.html">alignClusters</a></span><span class="op">(</span><span class="va">clust_query</span>, <span class="va">clust_ref</span><span class="op">)</span></span>
+<span><span class="co"># Extract score matrix</span></span>
+<span><span class="va">scores</span> <span class="op">&lt;-</span> <span class="va">divasRes</span><span class="op">$</span><span class="va">sampleScoreMatrix</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">scores</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">"comp"</span>, <span class="fl">1</span><span class="op">:</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">ncol</a></span><span class="op">(</span><span class="va">scores</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
-<span><span class="co"># Check alignment</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/table.html" class="external-link">table</a></span><span class="op">(</span><span class="va">clust_aligned</span>, <span class="va">clust_ref</span><span class="op">)</span></span></code></pre></div>
-</div>
-<div class="section level3">
-<h3 id="visualize-score-matrix">Visualize Score Matrix<a class="anchor" aria-label="anchor" href="#visualize-score-matrix"></a>
-</h3>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># Create example score matrix (e.g., PCA results)</span></span>
-<span><span class="va">scores</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span>
-<span>  comp1 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fl">100</span><span class="op">)</span>,</span>
-<span>  comp2 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fl">100</span><span class="op">)</span>,</span>
-<span>  comp3 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fl">100</span><span class="op">)</span></span>
-<span><span class="op">)</span></span>
+<span><span class="co"># WHO Ordinal Scale (disease severity: 1=mild, 7=severe)</span></span>
+<span><span class="va">wos</span> <span class="op">&lt;-</span> <span class="va">metadata</span><span class="op">$</span><span class="va">`Who Ordinal Scale`</span></span>
 <span></span>
-<span><span class="co"># Basic matrix plot</span></span>
+<span><span class="co"># 1. Basic matrix plot</span></span>
 <span><span class="fu"><a href="reference/matrixPlot.html">matrixPlot</a></span><span class="op">(</span><span class="va">scores</span>, max_ncomp <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span>
 <span></span>
-<span><span class="co"># Color by discrete groups (auto-detected)</span></span>
-<span><span class="va">groups</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">factor</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"A"</span>, <span class="st">"B"</span>, <span class="st">"C"</span><span class="op">)</span>, length.out <span class="op">=</span> <span class="fl">100</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="fu"><a href="reference/matrixPlot.html">matrixPlot</a></span><span class="op">(</span><span class="va">scores</span>, max_ncomp <span class="op">=</span> <span class="fl">3</span>, colBy <span class="op">=</span> <span class="va">groups</span>, legendTitle <span class="op">=</span> <span class="st">"Group"</span><span class="op">)</span></span>
+<span><span class="co"># 2. Color by disease severity (auto-detects ordinal labels like "1 or 2")</span></span>
+<span><span class="co">#    Use reverse_gradient=TRUE to map high severity → red</span></span>
+<span><span class="fu"><a href="reference/matrixPlot.html">matrixPlot</a></span><span class="op">(</span><span class="va">scores</span>, max_ncomp <span class="op">=</span> <span class="fl">3</span>, colBy <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">factor</a></span><span class="op">(</span><span class="va">wos</span><span class="op">)</span>, </span>
+<span>           legendTitle <span class="op">=</span> <span class="st">"WHO Ordinal Scale"</span>, </span>
+<span>           reverse_gradient <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span></span>
-<span><span class="co"># Color by continuous variable (auto-detected)</span></span>
-<span><span class="va">expression</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fl">100</span><span class="op">)</span></span>
-<span><span class="fu"><a href="reference/matrixPlot.html">matrixPlot</a></span><span class="op">(</span><span class="va">scores</span>, max_ncomp <span class="op">=</span> <span class="fl">3</span>, colBy <span class="op">=</span> <span class="va">expression</span>, </span>
-<span>           color_palette <span class="op">=</span> <span class="st">"viridis"</span>, legendTitle <span class="op">=</span> <span class="st">"Expression"</span><span class="op">)</span></span>
+<span><span class="co"># 3. Find top components correlated with severity</span></span>
+<span><span class="va">wos_numeric</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/numeric.html" class="external-link">as.numeric</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/grep.html" class="external-link">gsub</a></span><span class="op">(</span><span class="st">" or "</span>, <span class="st">"."</span>, <span class="va">wos</span><span class="op">)</span><span class="op">)</span>  <span class="co"># "1 or 2" → 1.5</span></span>
+<span><span class="va">correlations</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/cor.html" class="external-link">cor</a></span><span class="op">(</span><span class="va">scores</span>, <span class="va">wos_numeric</span>, method <span class="op">=</span> <span class="st">"spearman"</span><span class="op">)</span></span>
+<span><span class="va">top_comps</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/order.html" class="external-link">order</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/MathFun.html" class="external-link">abs</a></span><span class="op">(</span><span class="va">correlations</span><span class="op">)</span>, decreasing <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">5</span><span class="op">]</span></span>
 <span></span>
-<span><span class="co"># Integer clusters (auto-detected as discrete)</span></span>
-<span><span class="va">clusters</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">3</span>, length.out <span class="op">=</span> <span class="fl">100</span><span class="op">)</span></span>
-<span><span class="fu"><a href="reference/matrixPlot.html">matrixPlot</a></span><span class="op">(</span><span class="va">scores</span>, max_ncomp <span class="op">=</span> <span class="fl">3</span>, colBy <span class="op">=</span> <span class="va">clusters</span>, legendTitle <span class="op">=</span> <span class="st">"Cluster"</span><span class="op">)</span></span>
+<span><span class="co"># Visualize top components</span></span>
+<span><span class="fu"><a href="reference/matrixPlot.html">matrixPlot</a></span><span class="op">(</span><span class="va">scores</span>, comp_idx <span class="op">=</span> <span class="va">top_comps</span>, colBy <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">factor</a></span><span class="op">(</span><span class="va">wos</span><span class="op">)</span>,</span>
+<span>           reverse_gradient <span class="op">=</span> <span class="cn">TRUE</span>, pointSize <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span>
 <span></span>
-<span><span class="co"># Ordinal scale with reversed gradient (e.g., WHO Ordinal Scale: 7 = most severe)</span></span>
-<span><span class="va">wos</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">factor</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"1"</span>, <span class="st">"1 or 2"</span>, <span class="st">"2"</span>, <span class="st">"3"</span>, <span class="st">"4"</span>, <span class="st">"5"</span>, <span class="st">"6"</span>, <span class="st">"7"</span><span class="op">)</span><span class="op">)</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/sample.html" class="external-link">sample</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">8</span>, <span class="fl">100</span>, <span class="cn">TRUE</span><span class="op">)</span><span class="op">]</span></span>
-<span><span class="fu"><a href="reference/matrixPlot.html">matrixPlot</a></span><span class="op">(</span><span class="va">scores</span>, max_ncomp <span class="op">=</span> <span class="fl">3</span>, colBy <span class="op">=</span> <span class="va">wos</span>, legendTitle <span class="op">=</span> <span class="st">"WOS"</span>, </span>
-<span>           reverse_gradient <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>  <span class="co"># 7 = red (severe), 1 = blue (mild)</span></span></code></pre></div>
-</div>
-<div class="section level3">
-<h3 id="create-sankey-diagram">Create Sankey Diagram<a class="anchor" aria-label="anchor" href="#create-sankey-diagram"></a>
-</h3>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># Two classifications</span></span>
-<span><span class="va">class1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/sample.html" class="external-link">sample</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"A"</span>, <span class="st">"B"</span>, <span class="st">"C"</span><span class="op">)</span>, <span class="fl">100</span>, replace <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
-<span><span class="va">class2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/sample.html" class="external-link">sample</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"X"</span>, <span class="st">"Y"</span>, <span class="st">"Z"</span><span class="op">)</span>, <span class="fl">100</span>, replace <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
-<span><span class="fu"><a href="reference/plotSankey.html">plotSankey</a></span><span class="op">(</span><span class="va">class1</span>, <span class="va">class2</span><span class="op">)</span></span>
+<span><span class="co"># 4. Sankey diagram: Timepoint → Severity → Cluster</span></span>
+<span><span class="va">timepoint</span> <span class="op">&lt;-</span> <span class="va">metadata</span><span class="op">$</span><span class="va">timepoint</span></span>
+<span><span class="va">severity</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cut.html" class="external-link">cut</a></span><span class="op">(</span><span class="va">wos_numeric</span>, breaks <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">2</span>, <span class="fl">4</span>, <span class="fl">8</span><span class="op">)</span>, </span>
+<span>                labels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Mild"</span>, <span class="st">"Moderate"</span>, <span class="st">"Severe"</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">clusters</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/kmeans.html" class="external-link">kmeans</a></span><span class="op">(</span><span class="va">scores</span><span class="op">[</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">3</span><span class="op">]</span>, centers <span class="op">=</span> <span class="fl">3</span><span class="op">)</span><span class="op">$</span><span class="va">cluster</span></span>
 <span></span>
-<span><span class="co"># Three classifications</span></span>
-<span><span class="va">class3</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/sample.html" class="external-link">sample</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"P"</span>, <span class="st">"Q"</span>, <span class="st">"R"</span><span class="op">)</span>, <span class="fl">100</span>, replace <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
-<span><span class="fu"><a href="reference/plotSankey.html">plotSankey</a></span><span class="op">(</span><span class="va">class1</span>, <span class="va">class2</span>, <span class="va">class3</span>, fontsize <span class="op">=</span> <span class="fl">14</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu"><a href="reference/plotSankey.html">plotSankey</a></span><span class="op">(</span><span class="va">timepoint</span>, <span class="va">severity</span>, <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">factor</a></span><span class="op">(</span><span class="va">clusters</span><span class="op">)</span>, </span>
+<span>           class_names <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Timepoint"</span>, <span class="st">"Severity"</span>, <span class="st">"Cluster"</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># 5. Align clustering results</span></span>
+<span><span class="va">ref_clusters</span> <span class="op">&lt;-</span> <span class="va">metadata</span><span class="op">$</span><span class="va">reference_clusters</span></span>
+<span><span class="va">aligned</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/alignClusters.html">alignClusters</a></span><span class="op">(</span><span class="va">clusters</span>, <span class="va">ref_clusters</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/table.html" class="external-link">table</a></span><span class="op">(</span><span class="va">aligned</span>, <span class="va">ref_clusters</span><span class="op">)</span>  <span class="co"># Check alignment</span></span></code></pre></div>
 </div>
 </div>
 <div class="section level2">
@@ -171,27 +159,9 @@
 <p>vizOmics requires the following R packages: - ggplot2 - cowplot - gridExtra - networkD3 - dplyr - tidyr - clue - magrittr - rlang - viridisLite (for color palettes) - grDevices (for color generation) - utils</p>
 </div>
 <div class="section level2">
-<h2 id="acknowledgments">Acknowledgments<a class="anchor" aria-label="anchor" href="#acknowledgments"></a>
-</h2>
-<p>Some functions in this package are adapted from the <a href="https://github.com/JiadongM/PhiSpace" class="external-link">PhiSpace</a> package by Jiadong Mao. We thank the original authors for their excellent work.</p>
-</div>
-<div class="section level2">
 <h2 id="license">License<a class="anchor" aria-label="anchor" href="#license"></a>
 </h2>
-<p>MIT License - see <a href="LICENSE.html">LICENSE.md</a> for details.</p>
-</div>
-<div class="section level2">
-<h2 id="citation">Citation<a class="anchor" aria-label="anchor" href="#citation"></a>
-</h2>
-<p>If you use vizOmics in your research, please cite:</p>
-<pre><code>Mao, J., &amp; Sun, Y. (2025). vizOmics: Visualization Tools for Multi-Omics Data Analysis.
-R package version 0.1.0. https://github.com/ByronSyun/vizOmics</code></pre>
-</div>
-<div class="section level2">
-<h2 id="issues-and-contributions">Issues and Contributions<a class="anchor" aria-label="anchor" href="#issues-and-contributions"></a>
-</h2>
-<p>Please report issues at: <a href="https://github.com/ByronSyun/vizOmics/issues" class="external-link uri">https://github.com/ByronSyun/vizOmics/issues</a></p>
-<p>Contributions are welcome! Please feel free to submit pull requests.</p>
+<p>MIT License. Copyright (c) 2025 Jiadong Mao and Yinuo Sun. See <a href="LICENSE.html">LICENSE.md</a> for full details.</p>
 </div>
 </div>
   </main><aside class="col-md-3"><div class="links">
