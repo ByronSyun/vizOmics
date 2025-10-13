@@ -52,13 +52,15 @@ wos <- metadata$`Who Ordinal Scale`
 # 1. Basic matrix plot
 matrixPlot(scores, max_ncomp = 3)
 
-# 2. Color by disease severity (auto-detects ordinal labels like "1 or 2")
-#    Use reverse_gradient=TRUE to map high severity → red
+# 2. Color by disease severity
+#    matrixPlot auto-detects discrete categories and sorts them
+#    Use reverse_gradient=TRUE to map high severity (7) → red
 matrixPlot(scores, max_ncomp = 3, colBy = factor(wos), 
            legendTitle = "WHO Ordinal Scale", 
            reverse_gradient = TRUE)
 
 # 3. Find top components correlated with severity
+#    Manual conversion needed for correlation analysis
 wos_numeric <- as.numeric(gsub(" or ", ".", wos))  # "1 or 2" → 1.5
 correlations <- cor(scores, wos_numeric, method = "spearman")
 top_comps <- order(abs(correlations), decreasing = TRUE)[1:5]
