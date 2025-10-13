@@ -2,7 +2,7 @@ pandoc: 3.1.11
 pkgdown: 2.1.3
 pkgdown_sha: ~
 articles: {}
-last_built: 2025-10-13T03:54Z
+last_built: 2025-10-13T04:00Z
 urls:
   reference: https://byronsyun.github.io/vizOmics/reference
   article: https://byronsyun.github.io/vizOmics/articles
