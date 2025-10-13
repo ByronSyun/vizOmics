@@ -33,65 +33,53 @@ devtools::install_github("ByronSyun/vizOmics")
 
 ## Quick Start
 
-### Align Clustering Results
+### Example: COVID-19 Multi-Omics Analysis
 
 ```r
 library(vizOmics)
 
-# Create example clustering results
-clust_ref <- factor(c(rep("A", 50), rep("B", 50), rep("C", 50)))
-clust_query <- factor(c(rep("1", 50), rep("2", 50), rep("3", 50)))
+# Load DIVAS results and metadata
+divasRes <- readRDS("divas_results.rds")
+metadata <- readRDS("metadata.rds")
 
-# Align query to reference
-clust_aligned <- alignClusters(clust_query, clust_ref)
+# Extract score matrix
+scores <- divasRes$sampleScoreMatrix
+colnames(scores) <- paste0("comp", 1:ncol(scores))
 
-# Check alignment
-table(clust_aligned, clust_ref)
-```
+# WHO Ordinal Scale (disease severity: 1=mild, 7=severe)
+wos <- metadata$`Who Ordinal Scale`
 
-### Visualize Score Matrix
-
-```r
-# Create example score matrix (e.g., PCA results)
-scores <- data.frame(
-  comp1 = rnorm(100),
-  comp2 = rnorm(100),
-  comp3 = rnorm(100)
-)
-
-# Basic matrix plot
+# 1. Basic matrix plot
 matrixPlot(scores, max_ncomp = 3)
 
-# Color by discrete groups (auto-detected)
-groups <- factor(rep(c("A", "B", "C"), length.out = 100))
-matrixPlot(scores, max_ncomp = 3, colBy = groups, legendTitle = "Group")
+# 2. Color by disease severity (auto-detects ordinal labels like "1 or 2")
+#    Use reverse_gradient=TRUE to map high severity → red
+matrixPlot(scores, max_ncomp = 3, colBy = factor(wos), 
+           legendTitle = "WHO Ordinal Scale", 
+           reverse_gradient = TRUE)
 
-# Color by continuous variable (auto-detected)
-expression <- rnorm(100)
-matrixPlot(scores, max_ncomp = 3, colBy = expression, 
-           color_palette = "viridis", legendTitle = "Expression")
+# 3. Find top components correlated with severity
+wos_numeric <- as.numeric(gsub(" or ", ".", wos))  # "1 or 2" → 1.5
+correlations <- cor(scores, wos_numeric, method = "spearman")
+top_comps <- order(abs(correlations), decreasing = TRUE)[1:5]
 
-# Integer clusters (auto-detected as discrete)
-clusters <- rep(1:3, length.out = 100)
-matrixPlot(scores, max_ncomp = 3, colBy = clusters, legendTitle = "Cluster")
+# Visualize top components
+matrixPlot(scores, comp_idx = top_comps, colBy = factor(wos),
+           reverse_gradient = TRUE, pointSize = 2)
 
-# Ordinal scale with reversed gradient (e.g., WHO Ordinal Scale: 7 = most severe)
-wos <- factor(c("1", "1 or 2", "2", "3", "4", "5", "6", "7"))[sample(1:8, 100, TRUE)]
-matrixPlot(scores, max_ncomp = 3, colBy = wos, legendTitle = "WOS", 
-           reverse_gradient = TRUE)  # 7 = red (severe), 1 = blue (mild)
-```
+# 4. Sankey diagram: Timepoint → Severity → Cluster
+timepoint <- metadata$timepoint
+severity <- cut(wos_numeric, breaks = c(0, 2, 4, 8), 
+                labels = c("Mild", "Moderate", "Severe"))
+clusters <- kmeans(scores[, 1:3], centers = 3)$cluster
 
-### Create Sankey Diagram
+plotSankey(timepoint, severity, factor(clusters), 
+           class_names = c("Timepoint", "Severity", "Cluster"))
 
-```r
-# Two classifications
-class1 <- sample(c("A", "B", "C"), 100, replace = TRUE)
-class2 <- sample(c("X", "Y", "Z"), 100, replace = TRUE)
-plotSankey(class1, class2)
-
-# Three classifications
-class3 <- sample(c("P", "Q", "R"), 100, replace = TRUE)
-plotSankey(class1, class2, class3, fontsize = 14)
+# 5. Align clustering results
+ref_clusters <- metadata$reference_clusters
+aligned <- alignClusters(clusters, ref_clusters)
+table(aligned, ref_clusters)  # Check alignment
 ```
 
 ## Functions Overview
@@ -145,27 +133,8 @@ vizOmics requires the following R packages:
 - grDevices (for color generation)
 - utils
 
-## Acknowledgments
-
-Some functions in this package are adapted from the [PhiSpace](https://github.com/JiadongM/PhiSpace) package by Jiadong Mao. We thank the original authors for their excellent work.
-
 ## License
 
-MIT License - see [LICENSE.md](LICENSE.md) for details.
-
-## Citation
-
-If you use vizOmics in your research, please cite:
-
-```
-Mao, J., & Sun, Y. (2025). vizOmics: Visualization Tools for Multi-Omics Data Analysis.
-R package version 0.1.0. https://github.com/ByronSyun/vizOmics
-```
-
-## Issues and Contributions
-
-Please report issues at: https://github.com/ByronSyun/vizOmics/issues
-
-Contributions are welcome! Please feel free to submit pull requests.
+MIT License. Copyright (c) 2025 Jiadong Mao and Yinuo Sun. See [LICENSE.md](LICENSE.md) for full details.
 
 
