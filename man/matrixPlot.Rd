@@ -2,14 +2,14 @@
 % Please edit documentation in R/matrixPlot.R
 \name{matrixPlot}
 \alias{matrixPlot}
-\title{Score Matrix Plot}
+\title{Score matrix plot}
 \usage{
 matrixPlot(
   scores,
   max_ncomp = NULL,
   comp_idx = NULL,
+  var_names = NULL,
   colBy = NULL,
-  colBy_type = c("auto", "discrete"),
   pointAlpha = NULL,
   pointSize = 1,
   manualCol = NULL,
@@ -18,119 +18,38 @@ matrixPlot(
   returnPlotList = FALSE,
   legendTitle = "",
   compName = "comp",
-  color_palette = "matlab",
-  sort_levels = TRUE,
-  treat_ordinal_as_continuous = FALSE,
-  reverse_gradient = FALSE
+  legendPosition = c("right", "left", "bottom", "top", "inside", "none")
 )
 }
 \arguments{
-\item{scores}{Matrix or data frame of scores to be plotted. Should have column
-names matching the pattern specified by \code{compName}.}
+\item{scores}{Matrix of scores to be plotted}
 
-\item{max_ncomp}{Default NULL. Number of first components to plot. If specified,
-will override \code{comp_idx}.}
+\item{max_ncomp}{Default NULL. Number of first components to plot. If specified, will override comp_idx and var_names.}
 
-\item{comp_idx}{Default NULL. Indices of specific components to plot.}
+\item{comp_idx}{Default NULL. Indices of components to plot. Will override var_names if specified.}
 
-\item{colBy}{Numeric, character, or factor vector to specify color of points.
-Should have the same length as the number of rows in \code{scores}.}
+\item{var_names}{Default NULL. Character vector of variable names (column names) to plot. Will be overridden by max_ncomp or comp_idx if they are specified.}
 
-\item{colBy_type}{Character. Type of coloring: "auto" (default), "discrete". The
-previous option "continuous" is deprecated and will be treated as "auto".}
+\item{colBy}{Numeric or character vectors to specify colour of points.}
 
-\item{pointAlpha}{Numeric. Alpha transparency value for points (0-1).}
+\item{pointAlpha}{Alpha value.}
 
-\item{pointSize}{Numeric. Size of points. Default is 1.}
+\item{pointSize}{Point size.}
 
-\item{manualCol}{Character vector. Manual specification of colors for discrete
-\code{colBy} values.}
+\item{manualCol}{Manual specification of colours.}
 
-\item{manualAlpha}{Numeric vector. Manual specification of alpha values.}
+\item{manualAlpha}{Manual specification of alpha colours.}
 
-\item{fsize}{Numeric. Base font size for plots. Default is 14.}
+\item{fsize}{Figure font size.}
 
-\item{returnPlotList}{Logical. Whether to return individual plots as a list.
-Default is FALSE.}
+\item{returnPlotList}{Logical. Whether to return individual plots.}
 
-\item{legendTitle}{Character. Title for the legend. Default is empty string.}
+\item{legendTitle}{Legend title.}
 
-\item{compName}{Character. Prefix for component column names. Default is "comp",
-so that the 1st column is named "comp1", etc.}
+\item{compName}{Name of the components, default is "comp", so that the 1st column is named comp1 etc.}
 
-\item{color_palette}{Character. For continuous coloring: "matlab" (default),
-"viridis", "plasma", "inferno", "magma". For discrete coloring: "Set1", "Set2",
-"Set3", "Dark2", "Paired", or "custom".}
-
-\item{sort_levels}{Logical. For discrete coloring, whether to sort factor levels
-to ensure consistent color mapping across runs. Default is TRUE.}
-
-\item{treat_ordinal_as_continuous}{Logical. When TRUE, attempt to coerce
-character/factor ordinal labels (e.g. "1", "1 or 2", "7") into numeric values and
-use continuous gradients automatically if coercion succeeds. Default FALSE.}
-
-\item{reverse_gradient}{Logical. If TRUE, reverses the color gradient direction.
-For example, if your variable has higher values = more severe (like WOS: 7 is
-most severe), set TRUE to map high values to red. Default is FALSE (low = blue,
-high = red for matlab palette).}
-}
-\value{
-A combined plot (ggplot/grid object) showing:
-\itemize{
-\item Diagonal: Density plots with jittered points
-\item Off-diagonal: Pairwise scatter plots
-}
-If \code{returnPlotList = TRUE}, returns a list with the combined plot and
-individual plot components.
+\item{legendPosition}{Location of the legend when plotting two scores.}
 }
 \description{
-Create density and pairwise scatter plots for visualizing score matrices,
-such as PCA scores, DIVAS components, or other dimensionality reduction results.
-}
-\details{
-The function creates different visualizations depending on the number of components:
-\itemize{
-\item 1 component: Single density plot with jittered points
-\item 2 components: Scatter plot
-\item 3+ components: Matrix of density plots (diagonal) and scatter plots (off-diagonal)
-}
-\subsection{Color Type Detection (when colBy_type = "auto")}{
-
-The function intelligently determines whether to use discrete or continuous colors:
-\itemize{
-\item Factor or character: Always discrete, unless \code{treat_ordinal_as_continuous = TRUE}
-and labels can be reliably coerced to numeric (e.g. "1 or 2" -> 1.5)
-\item Numeric with <20 unique values and <50\\% of total: Discrete
-\item Numeric otherwise: Continuous
-}
-}
-
-\subsection{Color Consistency}{
-
-For discrete variables, colors are mapped consistently by sorting factor levels,
-ensuring the same colors appear for the same groups across different runs.
-Set \code{sort_levels = FALSE} to use the original factor level order.
-}
-}
-\examples{
-\dontrun{
-# Create example score matrix
-scores <- data.frame(
-  comp1 = rnorm(100),
-  comp2 = rnorm(100),
-  comp3 = rnorm(100)
-)
-
-# Basic plot
-matrixPlot(scores, max_ncomp = 3)
-
-# Ordinal labels treated as discrete by default (7 fixed colours)
-wos <- factor(c("1","1 or 2","2","3","4","5","6","7"))[sample(1:8, 100, TRUE)]
-matrixPlot(scores, max_ncomp = 3, colBy = wos, legendTitle = "WOS")
-
-# For WOS where 7 is most severe, reverse gradient to map 7->red, 1->blue
-matrixPlot(scores, max_ncomp = 3, colBy = wos, legendTitle = "WOS",
-           reverse_gradient = TRUE)
-}
-
+Density and pairwise scatter plots for visualising score matrices.
 }
