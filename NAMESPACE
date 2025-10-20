@@ -2,6 +2,7 @@
 
 export(alignClusters)
 export(matrixPlot)
+export(plotCircos)
 export(plotSankey)
 importFrom(dplyr,filter)
 importFrom(dplyr,mutate)

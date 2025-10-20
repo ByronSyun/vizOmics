@@ -17,6 +17,7 @@ reference:
     contents:
       - matrixPlot
       - plotSankey
+      - plotCircos
       
   - title: "Utility Functions"
     desc: >

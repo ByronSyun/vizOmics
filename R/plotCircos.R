@@ -69,6 +69,7 @@ wrap_label <- function(text, max_length){
 #' @return A list containing:
 #'   \item{correlations}{Data frame of filtered correlations}
 #'   \item{plot_recorded}{Recorded plot object that can be replayed with replayPlot()}
+#' @export
 #'
 plotCircos <- function(feature_list, 
                        data_list, 
