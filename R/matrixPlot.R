@@ -11,7 +11,7 @@
 #' @param pointSize Point size.
 #' @param manualCol Manual specification of colours.
 #' @param manualAlpha Manual specification of alpha colours.
-#' @param colBy Numeric or character vectors to specify colour of points.
+#' @param colBy Numeric or charactor vectors to specify colour of points.
 #' @param fsize Figure font size.
 #' @param returnPlotList Logical. Whether to return individual plots.
 #' @param legendTitle Legend title.
@@ -30,25 +30,25 @@ matrixPlot <- function(
     manualCol = NULL,
     manualAlpha = NULL,
     fsize = 14,
-    returnPlotList = FALSE,
+    returnPlotList = F,
     legendTitle = "",
     compName = "comp",
     legendPosition = c("right", "left",  "bottom", "top", "inside", "none")
 ){
-
+  
   legendPosition <- match.arg(legendPosition)
-
+  
   # Convert scores to matrix and ensure it has proper structure
   scores <- as.matrix(scores)
-
+  
   # Handle case where scores has no column names
   if(is.null(colnames(scores))) {
     colnames(scores) <- paste0(compName, 1:ncol(scores))
   }
-
+  
   # Convert to data frame for ggplot
   scores <- as.data.frame(scores)
-
+  
   # Determine which variables to plot based on priority: max_ncomp > comp_idx > var_names
   if(!is.null(max_ncomp)) {
     # Use first max_ncomp columns
@@ -69,139 +69,139 @@ matrixPlot <- function(
   } else {
     stop("Need to specify either max_ncomp, comp_idx, or var_names.")
   }
-
+  
   # If column names don't follow the expected pattern, rename them temporarily
   original_colnames <- colnames(scores)
   temp_colnames <- paste0(compName, 1:ncol(scores))
-
+  
   # Create a mapping between temporary and original names
   colname_mapping <- stats::setNames(original_colnames, temp_colnames)
-
+  
   # Temporarily rename columns for internal processing
   colnames(scores) <- temp_colnames
-
+  
   # Check if requested components exist (now using temporary names)
   requested_cols <- paste0(compName, comp_idx)
   if(!all(requested_cols %in% colnames(scores))){
     stop(paste0("Component indices out of range. Matrix only has ", ncol(scores), " columns."))
   }
-
+  
   Ngroups <- length(unique(colBy))
-
+  
   if(length(comp_idx) >= 3){
-
+    
     # Density plots on diagonal
     out_diag <- vector("list", length(comp_idx))
-
+    
     for(comp_i in 1:length(comp_idx)){
-
+      
       var2plot <- paste0(compName, comp_idx[comp_i])
       # Get original column name for axis label
       original_name <- colname_mapping[var2plot]
-
+      
       p <- scores %>%
-        ggplot2::ggplot(ggplot2::aes(x = !!rlang::sym(var2plot))) +
-        ggplot2::geom_density(bw = "sj") +
-        ggplot2::theme_bw(base_size = fsize) +
-        ggplot2::theme(
+        ggplot(aes(x = !!sym(var2plot))) +
+        geom_density(bw = "sj") +
+        theme_bw(base_size = fsize) +
+        theme(
           legend.position = "none",
-          axis.title.y = ggplot2::element_blank()
+          axis.title.y = element_blank()
         ) +
-        ggplot2::xlab(original_name)  # Use original column name for label
-
+        xlab(original_name)  # Use original column name for label
+      
       if(is.null(colBy)){
-
+        
         p <- p +
-          ggplot2::geom_jitter(ggplot2::aes(y = 0), height = diff(ggplot2::layer_scales(p)$y$range$range)/20, size = pointSize, stroke = 0)
+          geom_jitter(aes(y = 0), height = diff(layer_scales(p)$y$range$range)/20, size = pointSize, stroke = 0)
         out_diag[[comp_i]] <- p
-
+        
       } else {
-
+        
         p <- p +
-          ggplot2::geom_jitter(ggplot2::aes(y = 0, colour = colBy),
-                      height = diff(ggplot2::layer_scales(p)$y$range$range)/20)
-
+          geom_jitter(aes(y = 0, colour = colBy),
+                      height = diff(layer_scales(p)$y$range$range)/20)
+        
         if(!is.null(manualCol)){
-          p <- p + ggplot2::scale_color_manual(values = manualCol)
+          p <- p + scale_color_manual(values = manualCol)
         } else {
-
-          if(is.numeric(colBy)) p <- p + ggplot2::scale_colour_gradientn(colours = MATLAB_cols)
-
+          
+          if(is.numeric(colBy)) p <- p + scale_colour_gradientn(colours = MATLAB_cols)
+          
         }
-
+        
         out_diag[[comp_i]] <- p
-
+        
       }
     }
-
+    
     # Get the legend
     if(!is.null(colBy)){
       suppressWarnings(
         p_legend <- cowplot::get_legend(
-          p + ggplot2::theme(
+          p + theme(
             legend.position = "right"
-          ) + ggplot2::labs(colour = legendTitle)
-
+          ) + labs(colour = legendTitle)
+          
         )
       )
     }
-
+    
     # Scatter plots on non-diagonal
     combs <- utils::combn(comp_idx, 2) %>% t()
     out_nondiag <- vector("list", nrow(combs))
     for(comb in 1:nrow(combs)){
-
+      
       var1 <- paste0(compName, combs[comb, 1])
       var2 <- paste0(compName, combs[comb, 2])
-
+      
       # Get original column names for axis labels
       original_name1 <- colname_mapping[var1]
       original_name2 <- colname_mapping[var2]
-
+      
       if(is.null(colBy)){
-
+        
         p <- scores %>%
-          ggplot2::ggplot(ggplot2::aes(x = !!rlang::sym(var1), y = !!rlang::sym(var2))) +
-          ggplot2::geom_point(size = pointSize, stroke = 0) +
-          ggplot2::theme_bw(base_size = fsize) +
-          ggplot2::theme(
+          ggplot(aes(x = !! sym(var1), y = !! sym(var2))) +
+          geom_point(size = pointSize, stroke = 0) +
+          theme_bw(base_size = fsize) +
+          theme(
             legend.position = "none",
-            axis.ticks = ggplot2::element_blank()
+            axis.ticks = element_blank()
           ) +
-          ggplot2::xlab(original_name1) + ggplot2::ylab(original_name2)  # Use original names
-
+          xlab(original_name1) + ylab(original_name2)  # Use original names
+        
       } else {
-
+        
         p <-
           scores %>%
-          ggplot2::ggplot(ggplot2::aes(x = !!rlang::sym(var1), y = !!rlang::sym(var2))) +
-          ggplot2::geom_point(ggplot2::aes(colour = colBy), size = pointSize, stroke = 0) +
-          ggplot2::theme_bw(base_size = fsize) +
-          ggplot2::theme(
+          ggplot(aes(x = !! sym(var1), y = !! sym(var2))) +
+          geom_point(aes(colour = colBy), size = pointSize, stroke = 0) +
+          theme_bw(base_size = fsize) +
+          theme(
             legend.position = "none",
-            axis.ticks = ggplot2::element_blank()
+            axis.ticks = element_blank()
           ) +
-          ggplot2::xlab(original_name1) + ggplot2::ylab(original_name2)  # Use original names
-
+          xlab(original_name1) + ylab(original_name2)  # Use original names
+        
         if(!is.null(manualCol)){
-          p <- p + ggplot2::scale_color_manual(values = manualCol)
+          p <- p + scale_color_manual(values = manualCol)
         } else {
-
-          if(is.numeric(colBy)) p <- p + ggplot2::scale_colour_gradientn(colours = MATLAB_cols)
+          
+          if(is.numeric(colBy)) p <- p + scale_colour_gradientn(colours = MATLAB_cols)
         }
       }
-
+      
       out_nondiag[[comb]] <- p
-
+      
     }
-
+    
     # Arrange plots
     out <- c(out_nondiag, out_diag)
     # Arrange diagonal
     diagIdx <- 1
     toAdd <- length(comp_idx)
     for(kk in 1:length(comp_idx)){
-
+      
       out[[diagIdx]] <- out_diag[[kk]]
       diagIdx <- diagIdx + toAdd
       toAdd <- toAdd - 1
@@ -218,124 +218,117 @@ matrixPlot <- function(
       startIdxNondiag <- endIdxNondiag + 1
       toAdd <- toAdd - 1
     }
-
+    
     layoutM <- matrix(NA, length(comp_idx), length(comp_idx))
-    layoutM[lower.tri(layoutM, diag = TRUE)] <- 1:length(out)
+    layoutM[lower.tri(layoutM, diag = T)] <- 1:length(out)
     if(!is.null(colBy)){
       out[[length(out) + 1]] <- p_legend
       layoutM[1, length(comp_idx)] <- length(out)
     }
     p <- gridExtra::grid.arrange(grobs = out, layout_matrix = layoutM)
-
+    
     ## Return
     if(returnPlotList){
       return(list(matrixPlot = p, plotList = out))
     } else {
       return(p)
     }
-
+    
   } else if (length(comp_idx) == 1){
-
+    
     var2plot <- paste0(compName, comp_idx)
     # Get original column name for axis label
     original_name <- colname_mapping[var2plot]
-
+    
     ## Only density plot is given
     out <-
       scores %>%
-      ggplot2::ggplot(ggplot2::aes(x = !!rlang::sym(var2plot))) +
-      ggplot2::geom_density(bw = "sj") +
-      ggplot2::theme_bw(base_size = fsize) +
-      ggplot2::ylab("Density") +
-      ggplot2::xlab(original_name)  # Use original column name
-
+      ggplot(aes(x = !! sym(var2plot))) +
+      geom_density(bw = "sj") +
+      theme_bw(base_size = fsize) +
+      ylab("Density") +
+      xlab(original_name)  # Use original column name
+    
     if(is.null(colBy)){
       out <-
         out +
-        ggplot2::geom_jitter(
-          ggplot2::aes(y=0),
-          height = diff(ggplot2::layer_scales(out)$y$range$range)/20,
+        geom_jitter(
+          aes(y=0),
+          height = diff(layer_scales(out)$y$range$range)/20,
           size = pointSize,
           shape = 16,
           stroke = 0
         )
-
+      
     } else {
       out <- out +
-        ggplot2::geom_jitter(
-          ggplot2::aes(y=0, colour = colBy),
-          height = diff(ggplot2::layer_scales(out)$y$range$range)/20,
+        geom_jitter(
+          aes(y=0, colour = colBy),
+          height = diff(layer_scales(out)$y$range$range)/20,
           size = pointSize,
           shape = 16,
           stroke = 0
-        ) + ggplot2::labs(colour = legendTitle)
+        ) + labs(colour = legendTitle)
     }
-
+    
     if(!is.null(manualCol)){
-      out <- out + ggplot2::scale_color_manual(values = manualCol)
+      out <- out + scale_color_manual(values = manualCol)
     } else {
-      if(is.numeric(colBy)) out <- out + ggplot2::scale_colour_gradientn(colours = MATLAB_cols)
+      if(is.numeric(colBy)) out <- out + scale_colour_gradientn(colours = MATLAB_cols)
     }
-
+    
     # Colour scale
     if(is.null(manualAlpha)){
-
+      
       if(is.null(pointAlpha)) pointAlpha <- 1
-
+      
       out <- out +
-        ggplot2::scale_alpha_manual(values = rep(pointAlpha, max(Ngroups, 1)))
-
+        scale_alpha_manual(values = rep(pointAlpha, Ngroups))
+      
     } else {
       out <- out +
-        ggplot2::scale_alpha_manual(values = manualAlpha)
+        scale_alpha_manual(values = manualAlpha)
     }
-
+    
     return(out)
-
+    
   } else {
-
+    
     ## Plot 2 components
-
+    
     var1 <- paste0(compName, comp_idx[1])
     var2 <- paste0(compName, comp_idx[2])
-
+    
     # Get original column names for axis labels
     original_name1 <- colname_mapping[var1]
     original_name2 <- colname_mapping[var2]
-
+    
     if(is.null(colBy)){
-
+      
       p <- scores %>%
-        ggplot2::ggplot(ggplot2::aes(x = !!rlang::sym(var1), y = !!rlang::sym(var2))) +
-        ggplot2::geom_point(size = pointSize, stroke = 0) +
-        ggplot2::theme_bw(base_size = fsize) +
-        ggplot2::theme(legend.position = legendPosition) +
-        ggplot2::xlab(original_name1) + ggplot2::ylab(original_name2)  # Use original names
-
+        ggplot(aes(x = !! sym(var1), y = !! sym(var2))) +
+        geom_point(size = pointSize, stroke = 0) +
+        theme_bw(base_size = fsize) +
+        theme(legend.position = legendPosition) +
+        xlab(original_name1) + ylab(original_name2)  # Use original names
+      
     } else {
-
+      
       p <-
         scores %>%
-        ggplot2::ggplot(ggplot2::aes(x = !!rlang::sym(var1), y = !!rlang::sym(var2))) +
-        ggplot2::geom_point(ggplot2::aes(colour = colBy), size = pointSize, stroke = 0) +
-        ggplot2::theme_bw(base_size = fsize) + ggplot2::labs(colour = legendTitle) +
-        ggplot2::theme(legend.position = legendPosition) +
-        ggplot2::xlab(original_name1) + ggplot2::ylab(original_name2)  # Use original names
-
+        ggplot(aes(x = !! sym(var1), y = !! sym(var2))) +
+        geom_point(aes(colour = colBy), size = pointSize, stroke = 0) +
+        theme_bw(base_size = fsize) + labs(colour = legendTitle) +
+        theme(legend.position = legendPosition) +
+        xlab(original_name1) + ylab(original_name2)  # Use original names
+      
       if(!is.null(manualCol)){
-        p <- p + ggplot2::scale_color_manual(values = manualCol)
+        p <- p + scale_color_manual(values = manualCol)
       } else {
-        if(is.numeric(colBy)) p <- p + ggplot2::scale_colour_gradientn(colours = MATLAB_cols)
+        if(is.numeric(colBy)) p <- p + scale_colour_gradientn(colours = MATLAB_cols)
       }
     }
   }
-
+  
   return(p)
 }
-
-
-# Define MATLAB color palette
-MATLAB_cols <- c(
-  "#0072BD", "#D95319", "#EDB120", "#7E2F8E", "#77AC30",
-  "#4DBEEE", "#A2142F", "#FF6F00", "#00C853", "#6200EA"
-)
