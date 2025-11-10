@@ -11,7 +11,7 @@
 #'
 #' @return A ggplot2 object.
 #' @export
-loadBarplot <- function(
+plotLoadings <- function(
     Loadings, comp = "comp1", showInt = F, absVal = T, showNeg = F,
     nfeat = 30, fsize = 14, xlab = ""
 ){
