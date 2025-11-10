@@ -75,6 +75,7 @@
 #' @importFrom circlize colorRamp2
 #' @importFrom grid gpar
 #' @importFrom seriation seriate get_order
+#' @importFrom stats as.dist
 #' @export
 plotCorrelation <- function(mat,
                             use_seriation = TRUE,
@@ -152,9 +153,22 @@ plotCorrelation <- function(mat,
       column_order <- NULL
     } else {
       tryCatch({
-        o <- seriation::seriate(mat, method = seriation_method)
-        row_order <- seriation::get_order(o, 1)
-        column_order <- seriation::get_order(o, 2)
+        # Convert matrix to dist object for seriation
+        # Most seriation methods expect a dist object, not a raw matrix
+        if (seriation_method %in% c("OLO", "GW", "TSP")) {
+          # These methods work with dist objects
+          d_row <- as.dist(1 - mat)  # Convert similarity to distance
+          d_col <- as.dist(1 - t(mat))
+          o_row <- seriation::seriate(d_row, method = seriation_method)
+          o_col <- seriation::seriate(d_col, method = seriation_method)
+          row_order <- seriation::get_order(o_row)
+          column_order <- seriation::get_order(o_col)
+        } else {
+          # For methods that work with matrices (e.g., PCA, Spectral)
+          o <- seriation::seriate(mat, method = seriation_method)
+          row_order <- seriation::get_order(o, 1)
+          column_order <- seriation::get_order(o, 2)
+        }
       }, error = function(e) {
         warning("Seriation failed: ", e$message, ". Using default ordering.")
         row_order <- NULL
