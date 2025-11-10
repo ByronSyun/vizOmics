@@ -15,7 +15,7 @@ matrixPlot(
   manualCol = NULL,
   manualAlpha = NULL,
   fsize = 14,
-  returnPlotList = FALSE,
+  returnPlotList = F,
   legendTitle = "",
   compName = "comp",
   legendPosition = c("right", "left", "bottom", "top", "inside", "none")
@@ -30,7 +30,7 @@ matrixPlot(
 
 \item{var_names}{Default NULL. Character vector of variable names (column names) to plot. Will be overridden by max_ncomp or comp_idx if they are specified.}
 
-\item{colBy}{Numeric or character vectors to specify colour of points.}
+\item{colBy}{Numeric or charactor vectors to specify colour of points.}
 
 \item{pointAlpha}{Alpha value.}
 

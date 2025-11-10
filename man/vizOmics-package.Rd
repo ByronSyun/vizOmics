@@ -6,7 +6,7 @@
 \alias{vizOmics-package}
 \title{vizOmics: Visualization Tools for Multi-Omics Data Analysis}
 \description{
-A collection of visualization and utility functions for multi-omics data analysis. Includes tools for clustering alignment, score matrix visualization with intelligent color detection, and interactive Sankey diagrams for comparing classification results. Functions extracted and enhanced from PhiSpace package.
+A collection of visualization and utility functions for multi-omics data analysis. Includes tools for clustering alignment, score matrix visualization with intelligent color detection, and interactive Sankey diagrams for comparing classification results. Functions originally developed for the PhiSpace package.
 }
 \seealso{
 Useful links:
