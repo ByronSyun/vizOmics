@@ -24,11 +24,10 @@
 
 ## Installation
 
-You can install the development version of vizOmics from GitHub:
-
+You can install the development version of vizOmics using BiocManager as follows:
 ```r
-# install.packages("devtools")
-devtools::install_github("ByronSyun/vizOmics")
+# install.packages("BiocManager")
+BiocManager::install_github("ByronSyun/vizOmics")
 ```
 
 ## Quick Start
