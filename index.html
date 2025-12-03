@@ -57,7 +57,7 @@
 </h2>
 <ul>
 <li>
-<strong><code><a href="reference/alignClusters.html">alignClusters()</a></code></strong>: Align clustering results using optimal assignment (Hungarian algorithm)</li>
+<strong><code>alignClusters()</code></strong>: Align clustering results using optimal assignment (Hungarian algorithm)</li>
 <li>
 <strong><code><a href="reference/matrixPlot.html">matrixPlot()</a></code></strong>: Create comprehensive visualizations of score matrices with <strong>intelligent color detection</strong> and multiple palettes</li>
 <li>
@@ -72,10 +72,10 @@
 <div class="section level2">
 <h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
 </h2>
-<p>You can install the development version of vizOmics from GitHub:</p>
+<p>You can install the development version of vizOmics using BiocManager as follows:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># install.packages("devtools")</span></span>
-<span><span class="fu">devtools</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"ByronSyun/vizOmics"</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="co"># install.packages("BiocManager")</span></span>
+<span><span class="fu">BiocManager</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"ByronSyun/vizOmics"</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="quick-start">Quick Start<a class="anchor" aria-label="anchor" href="#quick-start"></a>
@@ -128,7 +128,7 @@
 <span></span>
 <span><span class="co"># 5. Align clustering results</span></span>
 <span><span class="va">ref_clusters</span> <span class="op">&lt;-</span> <span class="va">metadata</span><span class="op">$</span><span class="va">reference_clusters</span></span>
-<span><span class="va">aligned</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/alignClusters.html">alignClusters</a></span><span class="op">(</span><span class="va">clusters</span>, <span class="va">ref_clusters</span><span class="op">)</span></span>
+<span><span class="va">aligned</span> <span class="op">&lt;-</span> <span class="fu">alignClusters</span><span class="op">(</span><span class="va">clusters</span>, <span class="va">ref_clusters</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/table.html" class="external-link">table</a></span><span class="op">(</span><span class="va">aligned</span>, <span class="va">ref_clusters</span><span class="op">)</span>  <span class="co"># Check alignment</span></span></code></pre></div>
 </div>
 </div>
@@ -214,7 +214,7 @@
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.3.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
 </div>
 
     </footer>
