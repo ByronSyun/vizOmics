@@ -18,12 +18,17 @@ reference:
       - matrixPlot
       - plotSankey
       - plotCircos
+      - plotCorrelation
+      - plotCorrelationAnnotated
+      - plotGroups
+      - plotGroupsMultiMetric
+      - plotLoadings
       
   - title: "Utility Functions"
     desc: >
       Helper functions for data processing.
     contents:
-      - alignClusters
+      - align_clusters
 
 navbar:
   structure:
