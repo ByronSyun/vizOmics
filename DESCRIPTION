@@ -10,7 +10,7 @@ Description: A collection of visualization and utility functions for multi-omics
     data analysis. Includes tools for clustering alignment, score matrix visualization
     with intelligent color detection, and interactive Sankey diagrams for comparing 
     classification results. Functions originally developed for the PhiSpace package.
-License: MIT + file LICENSE
+License: AGPL (>= 3)
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.3.3
