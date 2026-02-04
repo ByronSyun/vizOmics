@@ -12,15 +12,14 @@
 - **`matrixPlot()`**: Create comprehensive visualizations of score matrices with **intelligent color detection** and multiple palettes
 - **`plotSankey()`**: Generate interactive Sankey diagrams for 2 or 3 classification comparisons
 
-### 🆕 What's New in vizOmics
+### Enhanced matrixPlot() Features
 
-**Enhanced `matrixPlot()` with Smart Coloring**:
-- ✅ **Intelligent color type detection**: Automatically distinguishes between discrete (factors, clusters) and continuous (expression) variables
-- ✅ **Ordinal label parsing**: Recognizes patterns like "1 or 2" and converts to 1.5 for proper ordering
-- ✅ **Reproducible colors**: Fixed color mapping ensures consistency across runs
-- ✅ **Gradient direction control**: `reverse_gradient` parameter for mapping high values to warm colors
-- ✅ **Multiple palettes**: 5 continuous (MATLAB, viridis, plasma, inferno, magma) and 5 discrete (Set1, Set2, Set3, Dark2, Paired) options
-- ✅ **Full control**: Manual override for color types and custom color specifications
+- **Intelligent color type detection**: Automatically distinguishes between discrete (factors, clusters) and continuous (expression) variables
+- **Ordinal label parsing**: Recognizes patterns like "1 or 2" and converts to 1.5 for proper ordering
+- **Reproducible colors**: Fixed color mapping ensures consistency across runs
+- **Gradient direction control**: `reverse_gradient` parameter for mapping high values to warm colors
+- **Multiple palettes**: 5 continuous (MATLAB, viridis, plasma, inferno, magma) and 5 discrete (Set1, Set2, Set3, Dark2, Paired) options
+- **Manual control**: Override for color types and custom color specifications
 
 ## Installation
 
