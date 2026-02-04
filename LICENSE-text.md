@@ -1,4 +1,5 @@
 # License
 
     YEAR: 2025
-    COPYRIGHT HOLDER: Jiadong Mao and Yinuo Sun
+    COPYRIGHT HOLDER: DIVAS authors
+    LICENSE: AGPL-3
