@@ -136,6 +136,6 @@ vizOmics requires the following R packages:
 
 ## License
 
-MIT License. Copyright (c) 2025 Jiadong Mao and Yinuo Sun. See [LICENSE.md](LICENSE.md) for full details.
+GNU Affero General Public License v3.0 (AGPL-3). Copyright (c) 2025 Jiadong Mao and Yinuo Sun. See [LICENSE.md](LICENSE.md) for full details.
 
 
